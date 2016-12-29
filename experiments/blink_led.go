@@ -1,4 +1,4 @@
-package led
+package experiments
 
 import (
 	"gobot.io/x/gobot"

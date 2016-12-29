@@ -4,31 +4,35 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/raspi"
 	"gobot.io/x/gobot/api"
-	"github.com/miccab/gobot-go/led"
+	"github.com/miccab/gobot-go/experiments"
 	"flag"
+	"os"
+	"strings"
+)
+
+const (
+	LED_1 = "led1"
+	LED_2 = "led2"
 )
 
 func main() {
-	master := gobot.NewMaster()
-	server := api.NewAPI(master)
-	server.Port = "3000"
-	server.Start()
 	adaptor := raspi.NewAdaptor()
 
 	var experiment string
-	flag.StringVar(&experiment, "experiment", "UNkNOWN", "type of experiment")
+	flag.StringVar(&experiment, "e", "", "type of experiment: " + strings.Join([]string{LED_1,LED_2}, ","))
 	flag.Parse()
 
 	var devices []gobot.Device
 	var work func()
 
 	switch experiment {
-	case "1led":
-		devices, work = led.GetLedAndWork(adaptor)
-	case "2leds":
-		devices, work = led.Get2LedsAndWork(adaptor)
+	case LED_1:
+		devices, work = experiments.GetLedAndWork(adaptor)
+	case LED_2:
+		devices, work = experiments.Get2LedsAndWork(adaptor)
 	default:
-		panic("unknown experiment")
+		flag.Usage()
+		os.Exit(0)
 	}
 
 	robot := gobot.NewRobot("bot",
@@ -37,6 +41,10 @@ func main() {
 		work,
 	)
 	println("INFO: remember to run using sudo !")
+	master := gobot.NewMaster()
+	server := api.NewAPI(master)
+	server.Port = "3000"
+	server.Start()
 	master.AddRobot(robot)
 	master.Start()
 }
