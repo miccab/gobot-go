@@ -22,6 +22,6 @@ func main() {
 		[]gobot.Device{led},
 		work,
 	)
-	println("INFO: run using sudo")
+	println("INFO: run using sudo !")
 	robot.Start()
 }
