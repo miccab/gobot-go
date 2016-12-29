@@ -5,9 +5,14 @@ import (
 	"gobot.io/x/gobot"
 	"time"
 	"gobot.io/x/gobot/platforms/raspi"
+	"gobot.io/x/gobot/api"
 )
 
 func main() {
+	master := gobot.NewMaster()
+	server := api.NewAPI(master)
+	server.Port = "3000"
+	server.Start()
 	adaptor := raspi.NewAdaptor()
 	led := gpio.NewLedDriver(adaptor, "12")
 
@@ -22,6 +27,7 @@ func main() {
 		[]gobot.Device{led},
 		work,
 	)
-	println("INFO: run using sudo !")
-	robot.Start()
+	println("INFO: remember to run using sudo !")
+	master.AddRobot(robot)
+	master.Start()
 }
