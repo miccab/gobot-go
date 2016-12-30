@@ -14,13 +14,14 @@ const (
 	LED_1 = "led1"
 	LED_2 = "led2"
 	BUZZ  = "buzz"
+	LED_AND_BUZZ = "ledAndBuzz"
 )
 
 func main() {
 	adaptor := raspi.NewAdaptor()
 
 	var experiment string
-	flag.StringVar(&experiment, "e", "", "type of experiment: " + strings.Join([]string{LED_1,LED_2,BUZZ}, ","))
+	flag.StringVar(&experiment, "e", "", "type of experiment: " + strings.Join([]string{LED_1,LED_2,BUZZ,LED_AND_BUZZ}, ","))
 	flag.Parse()
 
 	var devices []gobot.Device
@@ -28,11 +29,13 @@ func main() {
 
 	switch experiment {
 	case LED_1:
-		devices, work = experiments.GetLedAndWork(adaptor)
+		devices, work = experiments.LedBlinking(adaptor)
 	case LED_2:
-		devices, work = experiments.Get2LedsAndWork(adaptor)
+		devices, work = experiments.TwoLedsBlinking(adaptor)
 	case BUZZ:
-		devices, work = experiments.GetBuzzerAndWork(adaptor)
+		devices, work = experiments.Buzz(adaptor)
+	case LED_AND_BUZZ:
+		devices, work = experiments.TwoLedsBlinkingAndBuzz(adaptor)
 	default:
 		flag.Usage()
 		os.Exit(0)

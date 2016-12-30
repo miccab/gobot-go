@@ -5,7 +5,7 @@ import (
 	"gobot.io/x/gobot"
 )
 
-func GetBuzzerAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
+func Buzz(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
 	buzzer := gpio.NewBuzzerDriver(writer, "11")
 	work = func() {
 		playStarWars(buzzer)

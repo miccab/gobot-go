@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func GetLedAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
+func LedBlinking(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
 	led := gpio.NewLedDriver(writer, "12")
 	work = func() {
 		gobot.Every(1*time.Second, func() {
@@ -17,7 +17,7 @@ func GetLedAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work func
 	return
 }
 
-func Get2LedsAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
+func TwoLedsBlinking(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
 	led1 := gpio.NewLedDriver(writer, "12")
 	led2 := gpio.NewLedDriver(writer, "16")
 	work = func() {
@@ -29,5 +29,24 @@ func Get2LedsAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work fu
 		})
 	}
 	devices = []gobot.Device{led1,led2}
+	return
+}
+
+
+func TwoLedsBlinkingAndBuzz(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
+	ledGreen := gpio.NewLedDriver(writer, "12")
+	ledRed := gpio.NewLedDriver(writer, "16")
+	buzzer := gpio.NewBuzzerDriver(writer, "11")
+	work = func() {
+		ledRed.On()
+		ledGreen.Off()
+		buzzer.On()
+		gobot.Every(1*time.Second, func() {
+			ledGreen.Toggle()
+			ledRed.Toggle()
+			buzzer.Toggle()
+		})
+	}
+	devices = []gobot.Device{ledGreen, ledRed}
 	return
 }
