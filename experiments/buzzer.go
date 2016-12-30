@@ -8,12 +8,22 @@ import (
 func GetBuzzerAndWork(writer gpio.DigitalWriter) (devices []gobot.Device, work func())  {
 	buzzer := gpio.NewBuzzerDriver(writer, "11")
 	work = func() {
-		buzzer.Tone(gpio.C5, gpio.Whole)
-		buzzer.Tone(gpio.D5, gpio.Half)
-		buzzer.Tone(gpio.E5, gpio.Quarter)
-		buzzer.Tone(gpio.F5, gpio.Eighth)
+		playStarWars(buzzer)
 	}
 	devices = []gobot.Device{buzzer}
 	return
+}
+
+func playStarWars(buzzer * gpio.BuzzerDriver) {
+	buzzer.Tone(gpio.A4, 500)
+	buzzer.Tone(gpio.A4, 500)
+	buzzer.Tone(gpio.F4, 350)
+	buzzer.Tone(gpio.C5, 150)
+
+	buzzer.Tone(gpio.A4, 500)
+	buzzer.Tone(gpio.F4, 350)
+	buzzer.Tone(gpio.C5, 150)
+	buzzer.Tone(gpio.A4, 1000)
+	buzzer.Tone(gpio.E5, 500)
 }
 
